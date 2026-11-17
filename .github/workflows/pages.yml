@@ -40,6 +40,8 @@ jobs:
       - run: npm run typecheck
       # Application (mode statique) + horaires ouverts dans dist/pages
       - run: npm run build:pages
+      # Garde-fou : une construction sans le mode statique (VITE_STATIC=1) afficherait l'ancienne interface sans horaires.
+      - run: grep -rlq "data/manifest.json" dist/pages/assets || { echo "Construction sans le mode statique"; exit 1; }
       - name: Domaine et page d'erreur
         run: |
           printf 'app.kumm.fr\n' > dist/pages/CNAME
